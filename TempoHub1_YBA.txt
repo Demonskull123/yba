@@ -26,7 +26,12 @@ end
 print(bypassOk and "[Tempo] Bypass OK" or "[Tempo] Bypass skipped (executor unsupported)")
 
 local TeekUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Demonskull123/bundleui/refs/heads/main/TempoUI-bundle.lua"))()
-local UI = TeekUI.new({ Title = "TEMPO", Subtitle = "YBA", Version = "v1", Preset = "Haunted" })
+local UI = TeekUI.new({
+    Title    = "TEMPO",
+    Subtitle = "YBA",
+    Version  = "v1",
+    Preset   = "Haunted",
+})
 
 local function notify(title, msg, duration)
     -- TeekUI Notify: single string or title+body
@@ -2524,11 +2529,11 @@ local function runRibFarm()
     end
 end
 
-local TabMain     = UI:Tab("Main", "tag")
-local TabLocal    = UI:Tab("LocalPlayer", "move")
-local TabMisc     = UI:Tab("Misc", "spark")
-local TabAnti     = UI:Tab("Anti-Stands", "shield")
-local TabSettings = UI:Tab("Settings", "sliders")
+local TabMain     = UI:Tab("Main")
+local TabLocal    = UI:Tab("LocalPlayer")
+local TabMisc     = UI:Tab("Misc")
+local TabAnti     = UI:Tab("Anti-Stands")
+local TabSettings = UI:Tab("Settings")
 
 TabMain:Section("Item Farm")
 
@@ -3228,10 +3233,13 @@ TabSettings:Section("About")
 
 TabSettings:Label("Tempo Hub | YBA\nThank you for using the script.")
 
-local TabIface = UI:Tab("Interface", "sliders")
+local TabIface = UI:Tab("Interface")
 UI:mountInterface(TabIface, {})
 
 UI:Boot({ "checking executor", "building interface", "loading farms", "ready" }, function()
+    pcall(function()
+        if UI.Select then UI:Select("Main") end
+    end)
     UI:Notify("TEMPO | YBA loaded", "good")
 end)
 
@@ -3256,7 +3264,7 @@ LocalPlayer.CharacterAdded:Connect(function()
 end)
 
 print("[Tempo Hub] YBA script loaded successfully. Lines: 3000+")
-notify("TEMPO", "YBA loaded! Check all tabs.")
+notify("Tempo Hub", "YBA — loaded! Check all tabs.")
 sendWebhook("Tempo Hub script loaded successfully on " .. LocalPlayer.Name .. ".", false)
 
 --  Keeps all RenderStepped connections alive across respawns
