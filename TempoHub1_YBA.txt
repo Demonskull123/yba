@@ -26,7 +26,7 @@ end
 print(bypassOk and "[Tempo] Bypass OK" or "[Tempo] Bypass skipped (executor unsupported)")
 
 local TeekUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Demonskull123/bundleui/refs/heads/main/TempoUI-bundle.lua"))()
-local UI = TeekUI.new({ Title = "Tempo Hub", Subtitle = "YBA", Version = "v1", Preset = "Haunted" })
+local UI = TeekUI.new({ Title = "TEMPO", Subtitle = "YBA", Version = "v1", Preset = "Haunted" })
 
 local function notify(title, msg, duration)
     -- TeekUI Notify: single string or title+body
@@ -2524,13 +2524,11 @@ local function runRibFarm()
     end
 end
 
-local TabMain     = UI:Tab("Main")
-local TabLocal    = UI:Tab("LocalPlayer")
-local TabMisc     = UI:Tab("Misc")
-local TabAnti     = UI:Tab("Anti-Stands")
-local TabSettings = UI:Tab("Settings")
-
-local _tabOk, _tabErr = pcall(function()
+local TabMain     = UI:Tab("Main", "tag")
+local TabLocal    = UI:Tab("LocalPlayer", "move")
+local TabMisc     = UI:Tab("Misc", "spark")
+local TabAnti     = UI:Tab("Anti-Stands", "shield")
+local TabSettings = UI:Tab("Settings", "sliders")
 
 TabMain:Section("Item Farm")
 
@@ -3230,27 +3228,14 @@ TabSettings:Section("About")
 
 TabSettings:Label("Tempo Hub | YBA\nThank you for using the script.")
 
-end)
-if not _tabOk then
-    warn("[Tempo Hub] tab build error: " .. tostring(_tabErr))
-    pcall(function() UI:Notify("Tab build error — check F9 console", "warn") end)
-end
-
-pcall(function()
-    local TabIface = UI:Tab("Interface")
-    if UI.mountInterface then
-        UI:mountInterface(TabIface, {})
-    end
-end)
+local TabIface = UI:Tab("Interface", "sliders")
+UI:mountInterface(TabIface, {})
 
 UI:Boot({ "checking executor", "building interface", "loading farms", "ready" }, function()
-    UI:Notify("Tempo Hub | YBA loaded", "good")
-    
-    pcall(function()
-        if UI.Select then UI:Select("Main") end
-    end)
+    UI:Notify("TEMPO | YBA loaded", "good")
 end)
 
+--  Re-teleport up and refresh counts after each death
 LocalPlayer.CharacterAdded:Connect(function()
     task.wait(1)
     cleanupPilot()
@@ -3271,9 +3256,10 @@ LocalPlayer.CharacterAdded:Connect(function()
 end)
 
 print("[Tempo Hub] YBA script loaded successfully. Lines: 3000+")
-notify("Tempo Hub", "YBA — loaded! Check all tabs.")
+notify("TEMPO", "YBA loaded! Check all tabs.")
 sendWebhook("Tempo Hub script loaded successfully on " .. LocalPlayer.Name .. ".", false)
 
+--  Keeps all RenderStepped connections alive across respawns
 RunService.Heartbeat:Connect(function()
     -- Auto-sprint keepalive (supplement to the connection)
     -- (the connection is re-established on characteradded if needed)
